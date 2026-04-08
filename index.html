@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moon Animation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0a1a;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Stars */
+    .stars {
+      position: absolute;
+      inset: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--duration) ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from { opacity: 0.2; transform: scale(1); }
+      to   { opacity: 1;   transform: scale(1.4); }
+    }
+
+    /* Orbit track */
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60vmin;
+      height: 60vmin;
+      margin-top: -30vmin;
+      margin-left: -30vmin;
+      border: 1px dashed rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      animation: orbit-spin 12s linear infinite;
+      transform-origin: center center;
+    }
+
+    @keyframes orbit-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* Moon sits at the top of the orbit circle */
+    .moon-wrapper {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .moon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fffde7, #f5d060 40%, #c8a630 100%);
+      box-shadow:
+        0 0 18px 6px rgba(255, 220, 80, 0.55),
+        0 0 40px 12px rgba(255, 200, 40, 0.25);
+      position: relative;
+      /* Counter-rotate so the moon face stays upright */
+      animation: counter-spin 12s linear infinite;
+    }
+
+    @keyframes counter-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(-360deg); }
+    }
+
+    /* Craters */
+    .crater {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(160, 120, 20, 0.35);
+      border: 1px solid rgba(140, 100, 10, 0.25);
+    }
+
+    .crater-1 { width: 10px; height: 10px; top: 10px; left: 8px; }
+    .crater-2 { width:  7px; height:  7px; top: 24px; left: 20px; }
+    .crater-3 { width:  5px; height:  5px; top: 12px; left: 26px; }
+
+    /* Glow halo */
+    .glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 80vmin;
+      height: 80vmin;
+      margin-top: -40vmin;
+      margin-left: -40vmin;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 220, 80, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      animation: pulse-glow 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse-glow {
+      from { opacity: 0.4; transform: scale(0.95); }
+      to   { opacity: 1;   transform: scale(1.05); }
+    }
+
+    /* Label */
+    .label {
+      position: absolute;
+      bottom: 5%;
+      width: 100%;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.3);
+      font-family: 'Georgia', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+  <div class="glow"></div>
+
+  <div class="orbit">
+    <div class="moon-wrapper">
+      <div class="moon">
+        <div class="crater crater-1"></div>
+        <div class="crater crater-2"></div>
+        <div class="crater crater-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="label">Moon</p>
+
+  <script>
+    // Procedurally place stars
+    const container = document.getElementById('stars');
+    const COUNT = 180;
+
+    for (let i = 0; i < COUNT; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+
+      const size = Math.random() * 2.5 + 0.5;
+      star.style.cssText = [
+        `width:${size}px`,
+        `height:${size}px`,
+        `top:${Math.random() * 100}%`,
+        `left:${Math.random() * 100}%`,
+        `--duration:${(Math.random() * 3 + 1.5).toFixed(2)}s`,
+        `animation-delay:${(Math.random() * 4).toFixed(2)}s`,
+      ].join(';');
+
+      container.appendChild(star);
+    }
+  </script>
+</body>
+</html>
