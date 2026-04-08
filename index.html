@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Golf Player on the Moon</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      font-family: sans-serif;
+    }
+
+    /* ── Stars ── */
+    #stars {
+      position: absolute;
+      inset: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--d) infinite alternate ease-in-out;
+    }
+
+    @keyframes twinkle {
+      from { opacity: 0.2; transform: scale(1); }
+      to   { opacity: 1;   transform: scale(1.4); }
+    }
+
+    /* ── Earth in background ── */
+    #earth {
+      position: absolute;
+      top: 40px;
+      right: 80px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #4fc3f7, #1565c0 55%, #0d47a1);
+      box-shadow: 0 0 30px rgba(79,195,247,0.4);
+    }
+
+    /* ── Moon surface ── */
+    #surface {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 28vh;
+      background: radial-gradient(ellipse at 50% 120%, #9e9e9e 0%, #616161 60%, #424242 100%);
+      border-radius: 50% 50% 0 0 / 15% 15% 0 0;
+    }
+
+    /* craters */
+    .crater {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #757575, #424242);
+      box-shadow: inset 2px 2px 6px rgba(0,0,0,0.6);
+    }
+
+    /* ── Scene container ── */
+    #scene {
+      position: absolute;
+      bottom: 28vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+    }
+
+    /* ── Flag ── */
+    #flag-pole {
+      position: absolute;
+      right: 10px;
+      bottom: 0;
+      width: 4px;
+      height: 70px;
+      background: #bdbdbd;
+    }
+
+    #flag {
+      position: absolute;
+      top: 2px;
+      left: 4px;
+      width: 26px;
+      height: 16px;
+      background: #ef5350;
+      clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+      animation: wave 1.4s infinite ease-in-out;
+      transform-origin: left center;
+    }
+
+    @keyframes wave {
+      0%,100% { transform: skewY(0deg) scaleX(1);   }
+      50%      { transform: skewY(-8deg) scaleX(0.9); }
+    }
+
+    /* ── Golfer ── */
+    #golfer {
+      position: absolute;
+      left: 30px;
+      bottom: 0;
+      width: 60px;
+      height: 110px;
+    }
+
+    /* Helmet */
+    .helmet {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 34px; height: 34px;
+      background: radial-gradient(circle at 40% 35%, #eeeeee, #9e9e9e);
+      border-radius: 50%;
+      border: 3px solid #bdbdbd;
+      z-index: 2;
+    }
+
+    .visor {
+      position: absolute;
+      top: 8px; left: 5px;
+      width: 24px; height: 14px;
+      background: linear-gradient(135deg, rgba(255,200,0,0.85), rgba(255,160,0,0.7));
+      border-radius: 30% 30% 40% 40%;
+    }
+
+    /* Suit body */
+    .body {
+      position: absolute;
+      top: 32px; left: 50%;
+      transform: translateX(-50%);
+      width: 32px; height: 36px;
+      background: radial-gradient(circle at 40% 30%, #eeeeee, #9e9e9e);
+      border-radius: 8px;
+      border: 2px solid #bdbdbd;
+    }
+
+    /* Backpack */
+    .backpack {
+      position: absolute;
+      top: 35px; left: 50%;
+      transform: translateX(6px);
+      width: 12px; height: 20px;
+      background: #bdbdbd;
+      border-radius: 3px;
+    }
+
+    /* Arms */
+    .arm-left {
+      position: absolute;
+      top: 36px; left: 4px;
+      width: 12px; height: 28px;
+      background: radial-gradient(circle at 40% 30%, #eeeeee, #9e9e9e);
+      border-radius: 6px;
+      transform-origin: top center;
+      transform: rotate(30deg);
+      border: 2px solid #bdbdbd;
+      animation: swing-arm 1.8s infinite ease-in-out;
+    }
+
+    .arm-right {
+      position: absolute;
+      top: 36px; right: 4px;
+      width: 12px; height: 28px;
+      background: radial-gradient(circle at 40% 30%, #eeeeee, #9e9e9e);
+      border-radius: 6px;
+      transform-origin: top center;
+      transform: rotate(-30deg);
+      border: 2px solid #bdbdbd;
+      animation: swing-arm 1.8s infinite ease-in-out reverse;
+    }
+
+    @keyframes swing-arm {
+      0%,100% { transform: rotate(30deg);  }
+      50%      { transform: rotate(-20deg); }
+    }
+
+    /* Club */
+    .club {
+      position: absolute;
+      top: 58px; left: 0px;
+      width: 5px; height: 40px;
+      background: #bdbdbd;
+      border-radius: 2px;
+      transform-origin: top center;
+      transform: rotate(20deg);
+      animation: swing-club 1.8s infinite ease-in-out;
+    }
+
+    .club-head {
+      position: absolute;
+      bottom: -5px; left: -4px;
+      width: 13px; height: 7px;
+      background: #757575;
+      border-radius: 3px;
+    }
+
+    @keyframes swing-club {
+      0%,100% { transform: rotate(20deg);  }
+      50%      { transform: rotate(-60deg); }
+    }
+
+    /* Legs */
+    .leg-left {
+      position: absolute;
+      top: 66px; left: 11px;
+      width: 12px; height: 30px;
+      background: radial-gradient(circle at 40% 30%, #eeeeee, #9e9e9e);
+      border-radius: 6px;
+      border: 2px solid #bdbdbd;
+    }
+
+    .leg-right {
+      position: absolute;
+      top: 66px; right: 11px;
+      width: 12px; height: 30px;
+      background: radial-gradient(circle at 40% 30%, #eeeeee, #9e9e9e);
+      border-radius: 6px;
+      border: 2px solid #bdbdbd;
+    }
+
+    /* Boots */
+    .boot-left {
+      position: absolute;
+      top: 92px; left: 7px;
+      width: 17px; height: 10px;
+      background: #757575;
+      border-radius: 4px 4px 2px 2px;
+    }
+
+    .boot-right {
+      position: absolute;
+      top: 92px; right: 5px;
+      width: 17px; height: 10px;
+      background: #757575;
+      border-radius: 4px 4px 2px 2px;
+    }
+
+    /* ── Golf ball ── */
+    #ball {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 35% 30%, #fff, #e0e0e0);
+      border-radius: 50%;
+      bottom: 6px;
+      left: 14px;
+      animation: flight 2.8s infinite ease-in-out;
+    }
+
+    @keyframes flight {
+      0%   { left: 14px;  bottom: 6px;  opacity: 1; transform: scale(1);   }
+      15%  { left: 30px;  bottom: 80px; opacity: 1; transform: scale(1);   }
+      50%  { left: 180px; bottom: 140px; opacity: 1; transform: scale(0.7); }
+      85%  { left: 300px; bottom: 50px; opacity: 0.6; transform: scale(0.5); }
+      100% { left: 320px; bottom: 6px;  opacity: 0; transform: scale(0.4); }
+    }
+
+    /* ── Label ── */
+    #label {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.85);
+      font-size: 22px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 12px rgba(255,255,255,0.5);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="stars"></div>
+  <div id="earth"></div>
+
+  <div id="surface">
+    <div class="crater" style="width:60px;height:20px;left:8%;top:30%;"></div>
+    <div class="crater" style="width:40px;height:14px;left:60%;top:50%;"></div>
+    <div class="crater" style="width:25px;height:9px; left:80%;top:25%;"></div>
+    <div class="crater" style="width:50px;height:17px;left:35%;top:60%;"></div>
+  </div>
+
+  <div id="scene">
+    <!-- Flag -->
+    <div id="flag-pole">
+      <div id="flag"></div>
+    </div>
+
+    <!-- Golfer -->
+    <div id="golfer">
+      <div class="helmet"><div class="visor"></div></div>
+      <div class="backpack"></div>
+      <div class="body"></div>
+      <div class="arm-left"></div>
+      <div class="arm-right"></div>
+      <div class="club"><div class="club-head"></div></div>
+      <div class="leg-left"></div>
+      <div class="leg-right"></div>
+      <div class="boot-left"></div>
+      <div class="boot-right"></div>
+    </div>
+
+    <!-- Ball -->
+    <div id="ball"></div>
+  </div>
+
+  <div id="label">⛳ Golf on the Moon</div>
+
+  <script>
+    // Generate stars
+    const container = document.getElementById('stars');
+    for (let i = 0; i < 200; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2.5 + 0.5;
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        top:${Math.random() * 75}%;
+        left:${Math.random() * 100}%;
+        --d:${(Math.random() * 2 + 1).toFixed(1)}s;
+        animation-delay:${(Math.random() * 2).toFixed(1)}s;
+      `;
+      container.appendChild(s);
+    }
+  </script>
+</body>
+</html>
